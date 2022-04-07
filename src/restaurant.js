@@ -57,18 +57,18 @@
 
 //------------------------------------------------------------------------------------------
 
-// PASSO 3: Crie uma função, separada da função `createMenu()`, que, dada uma string recebida por parâmetro, 
+// PASSO 3: Crie uma função, separada da função `createMenu()`, que, dada uma string recebida por parâmetro,
 // adiciona essa string ao array de `objetoRetornado.consumption`. Adicione essa função à chave `order`.
-// DICA: para criar isso, você pode: 
+// DICA: para criar isso, você pode:
 // - Definir a função `createMenu()`
-// - Definir o objeto que a `createMenu()` retorna, mas separadamente 
+// - Definir o objeto que a `createMenu()` retorna, mas separadamente
 // - E, depois, definir a função que será atribuída a `order`.
 // ```
 // const restaurant = {}
 //
 // const createMenu = (myMenu) => // Lógica que edita o objeto `restaurant`
 //
-// const orderFromMenu = (request) => // Lógica que adiciona à chave `consumption` de `restaurant` a string recebida no parâmetro `request`. 
+// const orderFromMenu = (request) => // Lógica que adiciona à chave `consumption` de `restaurant` a string recebida no parâmetro `request`.
 // // Essa função deve ser associada à chave `order` de `restaurant`
 // ```
 // Agora faça o TESTE 6 no arquivo `tests/restaurant.spec.js`.
@@ -81,6 +81,32 @@
 
 const restaurant = {};
 
+const percorreDrinks = (pedidos, cardapio) => {
+  const drink = Object.keys(cardapio.drink);
+  let soma = 0;
+  for (let index = 0; index < pedidos.length; index += 1) {
+    if (pedidos[index] === drink[0]) {
+      soma += cardapio.drink[drink[0]];
+    } else if (pedidos[index] === drink[1]) {
+      soma += cardapio.drink[drink[1]];
+    }
+  }
+  return soma;
+};
+
+const percorreAlimentos = (pedidos, cardapio) => {
+  const food = Object.keys(cardapio.food);
+  let soma = 0;
+  for (let index = 0; index < pedidos.length; index += 1) {
+    if (pedidos[index] === food[0]) {
+      soma += cardapio.food[food[0]];
+    } else if (pedidos[index] === food[1]) {
+      soma += cardapio.food[food[1]];
+    }
+  }
+  return soma;
+};
+
 const orderMenu = (pedido) => {
   restaurant.consumption.push(pedido);
 };
@@ -89,10 +115,13 @@ const createMenu = (objeto) => {
   restaurant.fetchMenu = () => objeto;
   restaurant.consumption = [];
   restaurant.order = orderMenu;
-  restaurant.pay = () => {
-    
+  restaurant.pay = () => {  
+    const valorFood = percorreAlimentos(restaurant.consumption, objeto);
+    const valorDrink = percorreDrinks(restaurant.consumption, objeto);
+    let resultado = (valorDrink + valorFood);
+    resultado += (resultado * 0.1);
+    return resultado; 
   };
-
   return restaurant;
 };
 
